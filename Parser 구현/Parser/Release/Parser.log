@@ -1,0 +1,2 @@
+﻿Main.obj : error LNK2001: 확인할 수 없는 외부 기호 _parser
+C:\GitHub\CDT\Parser 구현\Parser\Release\Parser.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.

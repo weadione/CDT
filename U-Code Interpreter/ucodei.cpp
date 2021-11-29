@@ -273,13 +273,13 @@ void Assemble::getLabel()
 
 int Assemble::getOpcode()
 {
-	char mnemonic[5];
+	char mnemonic[6];
 	int index;
 
 	// always start at 12-th column.
 	bufIndex = 11;
 	index = 0;
-	while (index < 5 && !isspace(lineBuffer[bufIndex])) {
+	while (index < 6 && !isspace(lineBuffer[bufIndex])) {
 		mnemonic[index++] = lineBuffer[bufIndex++];
 	}
 	mnemonic[index] = '\0';

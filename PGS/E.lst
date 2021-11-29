@@ -1,0 +1,291 @@
+    1 DIRECTIVE       BUILD_TREES -> ON;
+    2                 LIST_STATES -> ON;
+    3                 
+    4 LEXICON         '%ident' => IDENT;
+    5                 '%integer' => INT_CONST;
+    6 
+    7 SYNTAX E
+    8 E -> E '+' T    => ADD;
+    9   -> T;
+   10 T -> T '*' F    => MULT;
+   11   -> F;
+   12 F -> '(' E ')'  => EXP;
+   13   -> '%ident';
+   14   -> '%integer';
+   15 
+ VALID SOURCE
+
+
+   Nonterminal:   1
+        Nonterminal:   2
+             Terminal:  BUILD_TREES(   2,   1,  17)
+             Terminal:  ON(   2,   1,  32)
+        Nonterminal:   2
+             Terminal:  LIST_STATES(   2,   2,  17)
+             Terminal:  ON(   2,   2,  32)
+   Nonterminal:   7
+        Nonterminal:   6
+             Nonterminal:  12
+                  Terminal:  '%ident'(   3,   4,  17)
+             Nonterminal:  14
+                  Terminal:  IDENT(   2,   4,  29)
+        Nonterminal:   6
+             Nonterminal:  12
+                  Terminal:  '%integer'(   3,   5,  17)
+             Nonterminal:  14
+                  Terminal:  INT_CONST(   2,   5,  31)
+   Nonterminal:   9
+   Nonterminal:   4
+        Terminal:  E(   2,   7,   8)
+        Nonterminal:   8
+             Terminal:  E(   2,   8,   1)
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  E(   2,   8,   6)
+                       Terminal:  '+'(   3,   8,   8)
+                       Terminal:  T(   2,   8,  12)
+                  Nonterminal:  14
+                       Terminal:  ADD(   2,   8,  20)
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  T(   2,   9,   6)
+                  Nonterminal:  14
+        Nonterminal:   8
+             Terminal:  T(   2,  10,   1)
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  T(   2,  10,   6)
+                       Terminal:  '*'(   3,  10,   8)
+                       Terminal:  F(   2,  10,  12)
+                  Nonterminal:  14
+                       Terminal:  MULT(   2,  10,  20)
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  F(   2,  11,   6)
+                  Nonterminal:  14
+        Nonterminal:   8
+             Terminal:  F(   2,  12,   1)
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  '('(   3,  12,   6)
+                       Terminal:  E(   2,  12,  10)
+                       Terminal:  ')'(   3,  12,  12)
+                  Nonterminal:  14
+                       Terminal:  EXP(   2,  12,  20)
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  '%ident'(   3,  13,   6)
+                  Nonterminal:  14
+             Nonterminal:  10
+                  Nonterminal:  11
+                       Terminal:  '%integer'(   3,  14,   6)
+                  Nonterminal:  14
+
+ ******** TERMINAL    SYMBOL ********
+
+ '%ident'     '%integer'   '('          ')'          '*'          '+'         
+ '_|_'       
+
+ ******** NONTERMINAL SYMBOL ********
+
+ E  E$ F  T 
+
+ ******** Node        Values ********
+ enum nodeName = {
+  ADD,  ERROR,  EXP,  IDENT,  INT_CONST,  MULT};
+
+
+ **************************************
+ *      Pretty     Print              *
+ **************************************
+
+ DIRECTIVE 
+   BUILD_TREES             ->  ON;
+   LIST_STATES ->  ON;
+ LEXICON
+   '%ident'                                                     =>  IDENT;
+   '%integer'                                                   =>  INT_CONST;
+ SYNTAX  E
+ E                                             -- RULE NUMBER:  1
+  ->  E  '+'  T                                                   =>  ADD;
+  ->  T ;
+ T                                             -- RULE NUMBER:  3
+  ->  T  '*'  F                                                   =>  MULT;
+  ->  F ;
+ F                                             -- RULE NUMBER:  5
+  ->  '('  E  ')'                                                 =>  EXP;
+  ->  '%ident' ;
+  ->  '%integer' ;
+
+ **************************************
+ *       CROSS      REFERENCE         *
+ **************************************
+
+ '%ident'              6 
+ '%integer'            7 
+ '('                   5 
+ ')'                   5 
+ '*'                   3 
+ '+'                   1 
+ '_|_'                 0 
+ E                     5    0    2*   1    1*
+ E$                    0 
+ F                     4    3    7*   6*   5*
+ T                     4*   3    3*   2    1 
+
+ **************************************
+ *            STATISTICS              *
+ **************************************
+
+ --------- STRING TABLE ---------
+  String Table Space  :  204
+  Number Of    Entrys :   26
+  Average Entry Length:    7
+  Buckets Used        :   33
+
+ ------ SYMBOL INFORMATION ------
+  Terminal     Count  :    6
+  Nonterminal  Count  :    5
+  Tree Node    Count  :    6
+  Synonym      Count  :    0
+
+ ------ RULE   INFORMATION ------
+  Number  Of   Rules  :    8
+  Average Rule Length :    2
+
+ **************************************
+ *        C0 and lookahead info       *
+ **************************************
+
+ Number OF Kernels : 14
+ *** KERNEL :   0
+
+ E$ ->  .  E '_|_'
+ E ->  .  E '+' T
+ E ->  .  T
+ T ->  .  T '*' F
+ T ->  .  F
+ F ->  .  '(' E ')'
+ F ->  .  '%ident'
+ F ->  .  '%integer'
+
+ SHIFT   6  '%ident'
+ SHIFT   5  '%integer'
+ SHIFT   4  '('
+ SHIFT   3  E
+ SHIFT   2  F
+ SHIFT   1  T
+
+ *** KERNEL :   1
+ ACCESS SYMBOL :  T
+ E ->  T . 
+ T ->  T .  '*' F
+
+ REDUCE   2  '_|_' '+' ')'
+ SHIFT   7  '*'
+
+ *** KERNEL :   2
+ ACCESS SYMBOL :  F
+ T ->  F . 
+
+ REDUCE   4  '_|_' '+' '*' ')'
+
+ *** KERNEL :   3
+ ACCESS SYMBOL :  E
+ E$ ->  E .  '_|_'
+ E ->  E .  '+' T
+
+ SHIFT   9  '+'
+ SHIFT   8  '_|_'
+
+ *** KERNEL :   4
+ ACCESS SYMBOL :  '('
+ F ->  '(' .  E ')'
+ E ->  .  E '+' T
+ E ->  .  T
+ T ->  .  T '*' F
+ T ->  .  F
+ F ->  .  '(' E ')'
+ F ->  .  '%ident'
+ F ->  .  '%integer'
+
+ SHIFT   6  '%ident'
+ SHIFT   5  '%integer'
+ SHIFT   4  '('
+ SHIFT  10  E
+ SHIFT   2  F
+ SHIFT   1  T
+
+ *** KERNEL :   5
+ ACCESS SYMBOL :  '%integer'
+ F ->  '%integer' . 
+
+ REDUCE   7  '_|_' '+' '*' ')'
+
+ *** KERNEL :   6
+ ACCESS SYMBOL :  '%ident'
+ F ->  '%ident' . 
+
+ REDUCE   6  '_|_' '+' '*' ')'
+
+ *** KERNEL :   7
+ ACCESS SYMBOL :  '*'
+ T ->  T '*' .  F
+ F ->  .  '(' E ')'
+ F ->  .  '%ident'
+ F ->  .  '%integer'
+
+ SHIFT   6  '%ident'
+ SHIFT   5  '%integer'
+ SHIFT   4  '('
+ SHIFT  11  F
+
+ *** KERNEL :   8
+ ACCESS SYMBOL :  '_|_'
+ E$ ->  E '_|_' . 
+
+ ACCEPT 
+
+ *** KERNEL :   9
+ ACCESS SYMBOL :  '+'
+ E ->  E '+' .  T
+ T ->  .  T '*' F
+ T ->  .  F
+ F ->  .  '(' E ')'
+ F ->  .  '%ident'
+ F ->  .  '%integer'
+
+ SHIFT   6  '%ident'
+ SHIFT   5  '%integer'
+ SHIFT   4  '('
+ SHIFT   2  F
+ SHIFT  12  T
+
+ *** KERNEL :  10
+ ACCESS SYMBOL :  E
+ F ->  '(' E .  ')'
+ E ->  E .  '+' T
+
+ SHIFT  13  ')'
+ SHIFT   9  '+'
+
+ *** KERNEL :  11
+ ACCESS SYMBOL :  F
+ T ->  T '*' F . 
+
+ REDUCE   3  '_|_' '+' '*' ')'
+
+ *** KERNEL :  12
+ ACCESS SYMBOL :  T
+ E ->  E '+' T . 
+ T ->  T .  '*' F
+
+ REDUCE   1  '_|_' '+' ')'
+ SHIFT   7  '*'
+
+ *** KERNEL :  13
+ ACCESS SYMBOL :  ')'
+ F ->  '(' E ')' . 
+
+ REDUCE   5  '_|_' '+' '*' ')'
+

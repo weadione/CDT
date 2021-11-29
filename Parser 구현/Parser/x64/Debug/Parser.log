@@ -1,0 +1,2 @@
+﻿Main.obj : error LNK2019: parsermain 함수에서 참조되는 확인할 수 없는 외부 기호
+C:\GitHub\CDT\Parser 구현\Parser\x64\Debug\Parser.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
