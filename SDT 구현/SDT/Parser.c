@@ -30,32 +30,34 @@ int meaningfulToken(struct tokenType token);
  ***************************************************************************/
 enum nodeNumber {
 	ERROR_NODE, // ERROR_NODE가 0번으로 지정되어야 함.
-	ACTUAL_PARAM, ADD, ADD_ASSIGN, ARRAY_VAR, ASSIGN_OP,
-	CALL, COMPOUND_ST, CONST_NODE, DCL, DCL_ITEM,
-	DCL_LIST, DCL_SPEC, DIV, DIV_ASSIGN, EQ,
-	EXP_ST, FORMAL_PARA, FUNC_DEF, FUNC_HEAD,
+	ACTUAL_PARAM, ADD, ADD_ASSIGN, ARRAY_VAR, ASSIGN_OP, BREAK_ST,
+	CALL, CASE_ST, COMPOUND_ST, CONDITION_PART, CONST_TYPE, CONTINUE_ST, DCL, DCL_ITEM,
+	DCL_LIST, DCL_SPEC, DEFAULT_ST, DIV, DIV_ASSIGN, DO_WHILE_ST, EQ,
+	EXP_ST, FORMAL_PARA, FOR_ST, FUNC_DEF, FUNC_HEAD,
 	GE, GT, IDENT, IF_ELSE_ST, IF_ST,
-	INDEX, INT_NODE, LE, LOGICAL_AND, LOGICAL_NOT,
-	LOGICAL_OR, LT, MOD, MOD_ASSIGN, MUL,
+	INDEX, INIT_PART, INT_TYPE, LE, LOGICAL_AND, LOGICAL_NOT,
+	LOGICAL_OR, LT, MOD_ASSIGN, MUL,
 	MUL_ASSIGN, NE, NUMBER, PARAM_DCL, POST_DEC,
-	POST_INC, PRE_DEC, PRE_INC, PROGRAM, RETURN_ST,
-	SIMPLE_VAR, STAT_LIST, SUB, SUB_ASSIGN, UNARY_MINUS,
-	VOID_NODE, WHILE_ST
+	POST_INC, POST_PART, PRE_DEC, PRE_INC, PROGRAM, REMAINDER, RETURN_ST,
+	SIMPLE_VAR, STAT_LIST, SUB, SUB_ASSIGN, SWITCH_ST, UNARY_MINUS,
+	VOID_TYPE, WHILE_ST
 };
 
+
+//BREAK_ST CASE_ST CONDITION_PART
 char* nodeName[] = {
    "ERROR_NODE",
-   "ACTUAL_PARAM", "ADD",         "ADD_ASSIGN",   "ARRAY_VAR",   "ASSIGN_OP",
-   "CALL",         "COMPOUND_ST", "CONST_NODE",   "DCL",         "DCL_ITEM",
-   "DCL_LIST",     "DCL_SPEC",    "DIV",          "DIV_ASSIGN",  "EQ",
-   "EXP_ST",      "FORMAL_PARA",  "FUNC_DEF",    "FUNC_HEAD",
+   "ACTUAL_PARAM", "ADD",         "ADD_ASSIGN",   "ARRAY_VAR",   "ASSIGN_OP",   "BREAK_ST",
+   "CALL", "CASE_ST",    "COMPOUND_ST", "CONDITION_PART", "CONST_TYPE", "CONTINUE_ST",  "DCL",         "DCL_ITEM",
+   "DCL_LIST",     "DCL_SPEC",  "DEFAULT_ST",  "DIV",          "DIV_ASSIGN", "DO_WHILE_ST",  "EQ",
+   "EXP_ST",      "FORMAL_PARA", "FOR_ST",  "FUNC_DEF",    "FUNC_HEAD",
    "GE",           "GT",          "IDENT",        "IF_ELSE_ST",  "IF_ST",
-   "INDEX",        "INT_NODE",    "LE",           "LOGICAL_AND", "LOGICAL_NOT",
-   "LOGICAL_OR",   "LT",          "MOD",          "MOD_ASSIGN",  "MUL",
+   "INDEX",    "INIT_PART",    "INT_TYPE",    "LE",           "LOGICAL_AND", "LOGICAL_NOT",
+   "LOGICAL_OR",   "LT",               "MOD_ASSIGN",  "MUL",
    "MUL_ASSIGN",   "NE",          "NUMBER",       "PARAM_DCL",   "POST_DEC",
-   "POST_INC",     "PRE_DEC",     "PRE_INC",      "PROGRAM",     "RETURN_ST",
-   "SIMPLE_VAR",   "STAT_LIST",   "SUB",          "SUB_ASSIGN",  "UNARY_MINUS",
-   "VOID_NODE",    "WHILE_ST"
+   "POST_INC", "POST_PART",    "PRE_DEC",     "PRE_INC",      "PROGRAM",  "REMAINDER",   "RETURN_ST",
+   "SIMPLE_VAR",   "STAT_LIST",   "SUB",          "SUB_ASSIGN", "SWITCH_ST",  "UNARY_MINUS",
+   "VOID_TYPE",    "WHILE_ST"
 };
 
 // 문법이 확장되었을 경우 ruleName 역시 확장된 문법이 반영되어야 함.
@@ -65,9 +67,9 @@ int ruleName[] = {
 	/* 5            6            7            8           9           */
 	   0,           FUNC_DEF,    FUNC_HEAD,   DCL_SPEC,   0,
 	/* 10           11           12           13          14          */
-	   0,           0,           0,           CONST_NODE, INT_NODE,
+	   0,           0,           0,           CONST_TYPE, INT_TYPE,
 	/* 15           16           17           18          19          */
-	   VOID_NODE,   0,           FORMAL_PARA, 0,          0,
+	   VOID_TYPE,   0,           FORMAL_PARA, 0,          0,
 	/* 20           21           22           23          24          */
 	   0,           0,           PARAM_DCL,   COMPOUND_ST,DCL_LIST,
 	/* 25           26           27           28          29          */
@@ -75,31 +77,37 @@ int ruleName[] = {
 	/* 30           31           32           33          34          */
 	   0,           DCL_ITEM,    DCL_ITEM,    SIMPLE_VAR, ARRAY_VAR,
 	/* 35           36           37           38          39          */
-	   0,           0,           STAT_LIST,   0,          0,
+	   0,           0,           0,           0,          0,
 	/* 40           41           42           43          44          */
 	   0,           0,           0,           0,          0,
 	/* 45           46           47           48          49          */
-	   0,           EXP_ST,      0,           0,          IF_ST,
+	   0,           0,           0,           0,          0,
 	/* 50           51           52           53          54          */
-	   IF_ELSE_ST,  WHILE_ST,    RETURN_ST,   0,          0,
+	   0,           EXP_ST,      0,           0,          CASE_ST,
 	/* 55           56           57           58          59          */
-	   ASSIGN_OP,   ADD_ASSIGN,  SUB_ASSIGN,  MUL_ASSIGN, DIV_ASSIGN,
+	   DEFAULT_ST,  CONTINUE_ST, BREAK_ST,    IF_ST,      IF_ELSE_ST,
 	/* 60           61           62           63          64          */
-	   MOD_ASSIGN,  0,           LOGICAL_OR,  0,          LOGICAL_AND,
+	   WHILE_ST,    DO_WHILE_ST, SWITCH_ST,   FOR_ST,     INIT_PART,
 	/* 65           66           67           68          69          */
-	   0,           EQ,          NE,          0,          GT,
+	 CONDITION_PART,POST_PART,   RETURN_ST,   0,          0,
 	/* 70           71           72           73          74          */
-	   LT,          GE,          LE,          0,          ADD,
+	   ASSIGN_OP,   ADD_ASSIGN,  SUB_ASSIGN,  MUL_ASSIGN, DIV_ASSIGN,
 	/* 75           76           77           78          79          */
-	   SUB,         0,           MUL,         DIV,        MOD,
+	   MOD_ASSIGN,  0,           LOGICAL_OR,  0,          LOGICAL_AND,
 	/* 80           81           82           83          84          */
-	   0,           UNARY_MINUS, LOGICAL_NOT, PRE_INC,    PRE_DEC,
+	   0,           EQ,          NE,          0,          GT,
 	/* 85           86           87           88          89          */
-	   0,           INDEX,       CALL,        POST_INC,   POST_DEC,
+	   LT,          GE,          LE,          0,          ADD,
 	/* 90           91           92           93          94          */
+	   ADD,         0,           MUL,         DIV,        REMAINDER,
+	/* 95           96           97           98          99          */
+	   0,           UNARY_MINUS, LOGICAL_NOT, PRE_INC,    PRE_DEC,
+    /* 100          101          102          103         104         */
+	   0,           INDEX,       CALL,        POST_INC,   POST_DEC,
+	/* 105          106          107          108         109         */
 	   0,           0,           ACTUAL_PARAM,0,          0,
-	/* 95           96           97                                   */
-	   0,           0,           0
+	/* 110          111          112                                  */
+	   0,           0,           0,
 };
 
 int sp;                               // stack pointer
